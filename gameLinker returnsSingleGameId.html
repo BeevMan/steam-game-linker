@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+	    <meta charset="utf-8">
+		<title>Steam games, convert names to steam links</title>
+	</head>
+	<body>
+	  <h1> TEST </h1>
+	  <p><input type="text" id="raw" value="paste games here" /> <button onclick="saveList();">Submit</button> </p>
+	</body>
+	
+	
+	
+	<script>
+	    let steam; // where the parsed steam json is stored
+		let foundId; // used in the findGame function
+		let userList; // users input save in the saveList function
+		
+	    var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            // Typical action to be performed when the document is ready:
+                steam = JSON.parse(xhttp.responseText);
+				console.log(steam.applist.apps);
+            }
+        };
+        xhttp.open("GET", "steamGames.json", true);  // need to run node live server to get data from json file https://youtu.be/wI1CWzNtE-M?t=1300
+        xhttp.send();
+	
+	    function saveList(){ // saves the user's list obviously than calls findGame() function
+		    userList = document.getElementById('raw').value;
+			console.log("userList saved during saveList function");
+			findGame();
+		}
+	    function findGame(){
+		console.log("findGame function triggered"); console.log(userList);
+		    for (let i=0; i<steam.applist.apps.length;i++){
+			console.log("for loop triggered!");
+			    if (userList == steam.applist.apps[i].name) {
+				console.log("found a match!!! hoo fucking rah!!");
+			        foundId = steam.applist.apps[i].appid;
+					console.log(foundId);
+					//i = steam.applist.apps.length;
+				}
+			}
+		}
+	
+	
+	
+	
+	/*
+	  TO DO,
+	    X need to find how to access json, 
+		 X search json by game name,
+		   the games can currently be found but only with the same name and punctuation as listed in the JSON, for useability I should convert all letters to same case? 
+		
+		once appID is returned I can add it to https://store.steampowered.com/app/
+		  find reddits way of formatting links,
+		
+        get it working for multiple names at a time
+
+        set it up to run locally i.e if hosted on a site, frontend javascript will call 	https://api.steampowered.com/ISteamApps/GetAppList/v2/	or site updates list every so often?
+		
+	*/
+	
+	</script>
+	
+	
+</html>
