@@ -1,122 +1,139 @@
-        let objSteam = []; // where the parsed steam json is stored
-		let objApps = [];
-		let arrSingleId = []; // used in the findGame function to save reddit markdown ready links
-		let arrMultipleId = [];
-		let arrNotFound = [];
-		let userList = []; // users input saved in the saveList function
-		let intUserLen;
+
+
+
+
+
+let arrApps = [];
+let objIndex = {};
+let arrKeys;
+let arrSingleId = []; // used in the findGame function to save reddit markdown ready links
+let arrMultipleId = [];
+let arrNotFound = [];
+let arrUserList = []; // users input saved in the saveList function
 		
-      
-		
-		
-	    var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-            // Typical action to be performed when the document is ready:
-                objSteam = JSON.parse(xhttp.responseText);
-				console.log(objSteam.applist.apps);
-				for (let i=0;i<objSteam.applist.apps.length;i++){
-					objApps.push(objSteam.applist.apps[i]);
+      	
+const xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+	// Typical action to be performed when the document is ready:
+		let objSteam = JSON.parse(xhttp.responseText);
+		console.log(objSteam.applist.apps);
+		arrApps = objSteam.applist.apps;
+		arrApps.sort(function(a, b) {
+			let nameA = a.name.toUpperCase(); // ignore upper and lowercase
+			let nameB = b.name.toUpperCase();
+			if (nameA < nameB) {
+			return -1;
+			}
+			if (nameA > nameB) {
+			return 1;
+			}
+			return 0;	// names must be equal
+		});
+		for (let i = 0; i<arrApps.length ;i++){
+			arrApps[i].name = arrApps[i].name.toUpperCase();
+			arrApps[i].name = arrApps[i].name.replace(/®|™/g, '');
+			let ab = arrApps[i].name.slice(0,2);
+			
+			if (objIndex["Z`"] === undefined){
+				if (objIndex.hasOwnProperty(ab) === false){
+					objIndex[ab] = i;
 				}
-            }
-        };
-        xhttp.open("GET", "steamGames.json", true);
-        xhttp.send();
+			}
+	    }
+		arrKeys = Object.keys(objIndex);
+	}
+};
+xhttp.open("GET", "steamGames.json", true);  // need to run node live server to get data from json file https://youtu.be/wI1CWzNtE-M?t=1300 , could also place the api call here???
+xhttp.send();
 	
+function saveList(){ // triggered upon button press, saves the user's list than calls findGame() function
+	let strUserList = document.getElementById('raw').value;
+	strUserList = strUserList.replace(/®|™/g, ''); // call of duty games don't have the copyright symbol in arrApps so it's removed when user inputs it.  I removed the trademark symbol as well, some games such as Star Wars™ Jedi Knight™ II: Jedi Outcast™ come from humble bundle with an extra tm symbol
+	arrUserList = strUserList.split("\n");
+	findGame();
+};
+/*const options = { // options for fuseJS // options need refining currently super slow :( 
+	shouldSort: true,
+	includeScore: true,
+	threshold: 0.15,
+	location: 0,
+	distance: 50,
+	maxPatternLength: 64,
+	minMatchCharLength: 1,
+	keys: [
+	  "name"
+	]
+};*/
 
-        let options = { // options for fuseJS
-            shouldSort: true,
-            includeScore: true,
-            threshold: 0.15,
-            location: 0,
-            distance: 50,
-            maxPatternLength: 64,
-            minMatchCharLength: 1,
-            keys: [
-            "name"
-            ]
-        };
-        let fuse = new Fuse(objApps, options); // "objApps" is the item array
-        //var result = fuse.search("rust");
-
-	    function saveList(){ // triggered upon button press, saves the user's list than calls findGame() function
-		    let stringUserList = document.getElementById('raw').value;
-            userList = stringUserList.split("\n");
-            intUserLen = userList.length;			
-			console.log("userList saved during saveList function");
-			findGame();
-		};
-		
-		
-	    function findGame(){  // loops through steam variable looking for a name match, adds each match to foundId array , when loop finishes checks length of foundId and then calls makeLists() function
-		console.log("findGame function triggered"); console.log(userList);
-		    
-			for (let j=0; j<intUserLen;j++){ // loops through users list
-				let foundId = [];  
-				let objFuzzy = fuse.search(userList[j]); // saves search results of fuseJS
+function findGame(){
+    console.log(arrUserList);
+	//let fuse = new Fuse(arrApps, options); // "arrApps" is the item array
+    //var result = fuse.search("rust");
+	for (let j=0; j<arrUserList.length;j++){ // loops through users list
+		let foundId = [];
+        let nameA = arrUserList[j].toUpperCase();
+		console.log(arrUserList[j]);
+		let ab = objIndex[nameA.slice(0,2)];
+		let ac = arrKeys.indexOf(nameA.slice(0,2)) + 1;
+		ac = objIndex[arrKeys[ac]];
+		console.log("ab as index=",ab,"-",ac);
+		for (let i = ab; i<ac; i++){
+			let nameB = arrApps[i].name;
+			if (nameA === nameB) {
+				console.log("found a match!!");
+				foundId.push("[" + arrUserList[j] + "]" + "(" + "https://store.steampowered.com/app/" + arrApps[i].appid + ")"); // pushes reddit markdown ready links to the array
+				console.log(foundId);
+			}
+		}
+		let strReSearch;
+		if (foundId.length === 0) {
+		    strReSearch = arrUserList[j];
+			// will possibly turn the fuseJS search into an optional search for the arrNotFound list? Still need to play with the search options more to possibly optimize but it's currently very slow
+			/*let objFuzzy = fuse.search(strReSearch); // saves search results of fuseJS
+			console.log(objFuzzy,objFuzzy.length);
+			if (objFuzzy[0] === []){
 				let intScoreKeep = objFuzzy[0].score; // sets lowest search score
 				let intFuzzyLen = objFuzzy.length; // declaring outside of the loop is suppose to help performance
 				console.log("fuzzy search ran");
 				for (let i=0;i<intFuzzyLen;i++){ console.log("sorting fuzz");
 					if (intScoreKeep === objFuzzy[i].score){ 
-						foundId.push("[" + userList[j] + "]" + "(" + "https://store.steampowered.com/app/" + objFuzzy[i].item.appid + ")");
+						foundId.push("[" + strReSearch + "]" + "(" + "https://store.steampowered.com/app/" + objFuzzy[i].item.appid + ")");
 					}
 				}
-			    /* temporarily commented out to play with the fuzzy search also needs some edits
-				for (let i=0; i<objSteam.applist.apps.length;i++){
-			        console.log("for loop triggered!");
-			        if (userList[j] === objSteam.applist.apps[i].name) {
-				        console.log("found a match!!! hoo fucking rah!!");
-			            foundId.push("[" + userList[j] + "]" + "(" + "https://store.steampowered.com/app/" + objSteam.applist.apps[i].appid + ")"); // pushes reddit markdown ready links to the array
-					    console.log(foundId);
-				    }
-			    } */
-				if (foundId.length > 1){
-			        arrMultipleId.push(foundId); console.log("it found more than 2 matches for 1 game!");
-			    }  else if (foundId.length === 1) {
-				    arrSingleId.push(foundId); console.log("1 match, nice");
-			    }  else {
-				    arrNotFound.push(userList[j]); console.log("it didn't find a match");  
-			    };
-			};
-		    console.log("for loop finished!");
-       		
+			}*/
 			
-			
-			
-			makeLists();
-		};
-	    
-		
-		function makeLists(){ // currently only makes the li elements for single matches
-		    for (let i=0; i<arrSingleId.length; i++){
-			   	let listedLink = document.createElement("li"); // makes a <li></li> element learned from https://youtu.be/K3jb8_pPlRQ?t=2389
-				    console.log(listedLink);
-				let test = document.createTextNode(arrSingleId[i]); // creates a text node?? idk have to look into it more
-				    console.log(test);
-				listedLink.appendChild(test); // adds the test variable to the <li> created above
-				    console.log(listedLink); console.log("li should have been logged twice now!");
-				document.getElementById("displayedList").appendChild(listedLink); // adds the newly created <li> to the html's ul
-			        console.log("list item should be made!");
-				}	
-		};
+		}
+		if (foundId.length > 1){
+			arrMultipleId.push(foundId); console.log("it found more than 2 matches for 1 game!");
+		}  else if (foundId.length === 1) {
+			arrSingleId.push(foundId); console.log("1 match, nice");
+		}  else {
+			arrNotFound.push(strReSearch); console.log("it didn't find a match");
+		}
+	};
+	console.log("for loop finished!");
 	
+	makeLists();
+};
+
+function makeLists(){ // currently only makes the li elements for single matches
+    let strToList;
+	let singleLen = arrSingleId.length;
+	for (let i=0; i<singleLen; i++){
+		//let listedLink = document.createElement("li");
+		//listedLink.innerHTML = arrSingleId[i];
+		strToList += "<li>"+ arrSingleId[i] + "</li>"
+		document.getElementById("displayedList").innerHTML = strToList;
+		}
+};
 	
-	
-	/*
-	  TO DO,
-	    X need to find how to access json, 
-		 X search json by game name,
-		   X fuzzy search by https://fusejs.io/
-		   need to alphabetize and index objApps to optimize search times?
-		X once appID is returned I can add it to https://store.steampowered.com/app/
-		  X find reddits way of formatting links, [test link](https://www.google.com) must be inputted from markdown mode
-		
-        X need to seperate into 3 lists,  1. games found with a single match  2. games found with multiple matches   3. games with no matches found 
-		  need to generate <li> elements for all 3 lists
-		X get it working for multiple names at a time
-		  if the user has multiple copy of the same game I need to track that too?
-          api call? https://api.steampowered.com/ISteamApps/GetAppList/v2/	 
-		need to add a status to the button to tell user's that it is busy working
-        user's text input area currently randomnly starts one space in, need to remove that space		
-	*/
+
+let arrAppsThatHave = []; 
+function doAppsHave(check){
+	for (let i = 0; i<arrApps.length ;i++){
+	    if (arrApps[i].name.includes(check)){
+			arrAppsThatHave.push(arrApps[i]);
+		}
+	}
+}
