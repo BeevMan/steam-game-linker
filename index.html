@@ -7,14 +7,29 @@
 		
 	</head>
 	<body>
-	  <h1> TEST </h1>
-	      <p><textarea id="raw" > </textarea> <button onclick="saveList();">Submit</button> </p>
+	  <h1> Convert your list of leftover games to mardown ready Reddit links! </h1>
+	      <p>To get a list of your Humble Bundle games.</p>
+			  <ol>
+				  <li>
+					<a class="bookmarklet" href="javascript:(function(){let strGames = '';let elJumpTo = document.getElementsByClassName('js-jump-to-page jump-to-page');let intLastPage = elJumpTo.length-2;let intPageCount = Number(elJumpTo[intLastPage].innerText) || 0;console.log('pre loop');for (let j = 0; j< intPageCount;j++){    let elH4 = document.querySelectorAll('h4');for (let i = 0; i < elH4.length; i++) {    strGames += elH4[i].innerHTML + '\n';}if (j < intPageCount -1){document.getElementsByClassName('hb hb-chevron-right')[0].click();    }}function textToClipboard (text) {    let dummy = document.createElement('textarea');    document.body.appendChild(dummy);    dummy.value = text;    dummy.select();    document.execCommand('copy');    document.body.removeChild(dummy);    }textToClipboard(strGames);    alert('Game names copied to clipboard!!');})();"
+					>Save this as a bookmark! </a>
+				  </li>
+				  <li>Go to HumbleBundle's website, login and navigate to the Key's page.</li>
+				  <li> Select your search options on HumbleBundle's Keys page, such as:</li>
+				  <ul>Most Recent or Alphabetical</ul>
+				  <ul>redeemed or non redeemed keys</ul>
+				  <li>Now open the bookmark you saved in step 1.</li>
+				  <li>You should get an alert telling you your games have been copied!</li>
+			  </ol>
+	      <p>Put your game list below. Each game should be on a new line.</p>
+		  <textarea id="raw" > </textarea> <button onclick="saveList();">Submit</button>
 	      
 
       <h2>The List!</h2>	  
 	      <p>These games found a single match!</p>
 		  <ul id="displayedList">
 		  </ul>
+		  
 		<script type="text/javascript" src="scripts/fuse.js"></script>
 	    <script type="text/javascript" src="scripts/gameLinker.js"></script>
 	</body>
