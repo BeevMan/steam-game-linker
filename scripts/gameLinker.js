@@ -73,7 +73,7 @@ function findGame(){
 	for (let j=0; j<arrUserList.length;j++){ // loops through users list
 		let foundId = [];
         let nameA = arrUserList[j].toUpperCase();
-		console.log(arrUserList[j]);
+		console.log(nameA);
 		let ab = objIndex[nameA.slice(0,2)];
 		let ac = arrKeys.indexOf(nameA.slice(0,2)) + 1;
 		ac = objIndex[arrKeys[ac]];
