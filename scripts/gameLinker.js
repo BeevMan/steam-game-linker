@@ -118,7 +118,7 @@ function findGame(){
 };
 
 function makeLists(){ // currently only makes the li elements for single matches
-    let strToList;
+    let strToList = "";
 	let singleLen = arrSingleId.length;
 	for (let i=0; i<singleLen; i++){
 		//let listedLink = document.createElement("li");
