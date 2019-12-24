@@ -12,11 +12,9 @@
 			  <ol>
 				  <p>Alternative method.</p>
 				  <li>
-				    <p>
 					<a class="bookmarklet" href="javascript:(function()%7Bfunction%20copyList()%7Blet%20strGames%20%3D%20%22%22%3Blet%20elJumpTo%20%3D%20document.getElementsByClassName(%22js-jump-to-page%20jump-to-page%22)%3Blet%20intLastPage%20%3D%20elJumpTo.length-2%3Blet%20intPageCount%20%3D%201%3Bif(intLastPage%20%3E%200)%7BintPageCount%20%3D%20Number(elJumpTo%5BintLastPage%5D.innerText)%3Bif(elJumpTo%5B1%5D.innerText%20%3D%3D%3D%20%221%22)%7BelJumpTo%5B1%5D.click()%3B%7D%7Dfor%20(let%20j%20%3D%200%3B%20j%3C%20intPageCount%3Bj%2B%2B)%7Blet%20elH4%20%3D%20document.querySelectorAll(%22h4%22)%3Bfor%20(let%20i%20%3D%200%3B%20i%20%3C%20elH4.length%3B%20i%2B%2B)%7BstrGames%20%2B%3D%20elH4%5Bi%5D.innerHTML%20%2B%20%22%5Cn%22%3B%7Dif%20(j%20%3C%20intPageCount%20-1)%7Bdocument.getElementsByClassName(%22hb%20hb-chevron-right%22)%5B0%5D.click()%3B%7D%7Dlet%20dummy%20%3D%20document.createElement(%22textarea%22)%3Bdocument.body.appendChild(dummy)%3Bdummy.value%20%3D%20strGames%3Bdummy.select()%3Bdocument.execCommand(%22copy%22)%3Bdocument.body.removeChild(dummy)%3B%7D%3Blet%20btn%20%3D%20document.createElement(%22label%22)%3Bbtn.innerHTML%20%3D%20'%3Cbutton%20id%20%3D%22copier%22%20style%20%3D%20%22padding%3A%200.1em%20.2em%3B%20background-color%3A%20red%3B%20color%3A%20white%3B%20text-align%3A%20center%22%20%3Elist%20to%20clipboard%3C%2Fbutton%3E'%3Bdocument.getElementsByClassName(%22sort%22)%5B0%5D.appendChild(btn)%3Bdocument.getElementById(%22copier%22).addEventListener(%22click%22%2C%20copyList)%7D)()"
-					>Save this as a bookmark! </a>(this is a bookmarklet, a piece of javascript code that is ran in the url)
-					
-				    </p>
+					>Save this as a bookmark! </a>
+					(this is a bookmarklet, a piece of javascript code that is ran in the url)
 				  </li>
 				  <li>Go to HumbleBundle's <a href="https://www.humblebundle.com/home/keys">Key's page</a>.  Login if you haven't already.</li>
 				  <li> Select your search options on HumbleBundle's Keys page, such as:
@@ -24,6 +22,7 @@
 				    <ul>redeemed or non redeemed keys</ul>
 				  </li>
 				  <li>Now open the bookmark you saved in step 1.</li>
+				    <ul>If using a mobile device, open the bookmark by typing the name of the bookmark in the address bar and click on it when available.</ul>
 				  <li>A red button "list to clipboard" should now be displayed, click the button to copy the list to your clipboard.</li>
 				  <ul>Please note, you will have to open the bookmark everytime you refresh or revisit the page.</ul>
 			  </ol>
