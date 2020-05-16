@@ -1,5 +1,4 @@
 
-
 function copyList(){
 	let strGames = "";
 	let elJumpTo = document.getElementsByClassName("js-jump-to-page jump-to-page");
@@ -28,8 +27,9 @@ function copyList(){
 				tempInfo[1] = tempInfo[1].slice(9);
 				tempInfo = tempInfo[0] + "\n" + tempInfo[1];
 				monthlyInfo.push(tempInfo);
-			} else
+			} else {
 			    strGames += elH4[i].innerHTML + "\n";
+			}
 		};
 		if (j < intPageCount -1){
 			document.getElementsByClassName("hb hb-chevron-right")[0].click();
@@ -37,7 +37,9 @@ function copyList(){
 	};
 	if (monthlies.length > 0){
 		logInOrder(monthlies,strGames,monthlyInfo);
-    } else clipboard(strGames); 
+    } else {
+		clipboard(strGames);
+    }		
 };
 
 
@@ -50,13 +52,25 @@ document.getElementById("copier").addEventListener("click", copyList);
 
 
 function clipboard(toCopy){
-	let dummy = document.createElement("textarea");
-	document.body.appendChild(dummy);
-	dummy.value = toCopy;
-	dummy.select();
-	document.execCommand("copy");
-	document.body.removeChild(dummy);
-	console.log("copied to clipboard!");
+	
+	if (navigator.clipboard){
+		navigator.clipboard.writeText(toCopy).then(function() {
+			//clipboard successfully set
+			alert("Game list copied to clipboard!");
+		}, function() {
+			// clipboard write failed
+			alert("Could not copy list to clipboard.");
+		});
+	} else {
+		// this way will copy my unredeemed list fine (121 lines) but will not copy my entire list (872 lines)
+		let dummy = document.createElement("textarea");
+		document.body.appendChild(dummy);
+		dummy.value = toCopy;
+		dummy.select();
+		document.execCommand("copy");
+		document.body.removeChild(dummy);
+		alert("List SHOULD be copied to clipboard.  Older browsers may experience issues copying large lists to clipboard.");
+	};
 };
 
 
