@@ -1,7 +1,8 @@
 # steam-game-linker
 
 Attempts to match a list of games to steamGames.json and return them in markdown ready links. (steamGames.json was obtained from [steam's api](https://api.steampowered.com/ISteamApps/GetAppList/v2/)) 
-Was made trying to match HumbleBundle's naming convention to Steam's.
+
+This projects main goal was trying to match HumbleBundle's naming convention to Steam's.
 
 User input game names must be seperated by a linebreak.
 
