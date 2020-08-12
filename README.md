@@ -9,7 +9,8 @@ User input game names must be seperated by a linebreak.
 ## Want to easily gather your HumbleBundle list?
 
 I made a [script](https://github.com/BeevMan/steam-game-linker/blob/master/scripts/hbKeyPgNameLister.js) for just that reason.  
-You can run my script in the browsers console or you can install my browser extension HumbleBundle Keys Clipboard:
+You can run my script in the browsers console or you can install my browser extension.
+HumbleBundle Keys Clipboard:
 
 [![Download from Chrome Web Store](https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x58.png 'HumbleBundle Keys Clipboard extension, available in the Chrome Web Store')](https://chrome.google.com/webstore/detail/humblebundle-keys-clipboa/cmepjcombnmfffjpnnnhmagpmdmnbedg?hl=en)
 
