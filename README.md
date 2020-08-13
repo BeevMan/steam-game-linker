@@ -1,4 +1,4 @@
-# steam-game-linker
+# [steam-game-linker](https://beevman.github.io/steam-game-linker/)
 
 Attempts to match a list of games to steamGames.json and return them in markdown ready links. (steamGames.json was obtained from [steam's api](https://api.steampowered.com/ISteamApps/GetAppList/v2/)) 
 
