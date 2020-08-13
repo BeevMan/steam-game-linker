@@ -6,7 +6,7 @@ This projects main goal was trying to match HumbleBundle's naming convention to 
 
 User input game names must be seperated by a linebreak.
 
-## Want to easily gather your HumbleBundle list?
+## Want to easily gather your [HumbleBundle keys & entitlements](https://www.humblebundle.com/home/keys) list?
 
 I made a [script](https://github.com/BeevMan/steam-game-linker/blob/master/scripts/hbKeyPgNameLister.js) for just that reason.  
 You can run my script in the browsers console or you can install my browser extension.  
